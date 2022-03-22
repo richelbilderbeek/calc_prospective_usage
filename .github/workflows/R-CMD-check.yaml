@@ -1,0 +1,25 @@
+on:
+  push:
+  pull_request:
+
+name: R-CMD-check
+
+jobs:
+  R-CMD-check:
+
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: r-lib/actions/setup-r@v1
+
+      - name: Install dependencies
+        run: |
+          install.packages(c("dplyr", "lubridate", "remotes", "testthat", "tibble"))
+        shell: Rscript {0}
+
+      - name: Report
+        run: Rscript calc_prospective_usage.R
+
